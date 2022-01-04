@@ -1,3 +1,4 @@
-job:
+Tarefa1:
     script:
         - echo "hello World"
+        - echo date
