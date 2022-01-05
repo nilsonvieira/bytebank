@@ -5,9 +5,11 @@ services:
 
 before_script:
 - docker info
-- docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+- docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_
 
 build-docker:
     stage: build
     script:
         - docker build -t minha-imagem .
+        - docker tag minha-imagem nilsonrsvieira/minha-imagem:latest
+        - docker push nilsonrsvieira/minha-imagem:latest
