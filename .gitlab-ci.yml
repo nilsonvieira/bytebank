@@ -1,4 +1,4 @@
 Tarefa1:
+    stage: build
     script:
-        - echo "hello World"
-        - echo date
+        - docker build -t minha-imagem .
