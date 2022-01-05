@@ -1,4 +1,5 @@
-Tarefa1:
+image: docker:stable
+build-docker:
     stage: build
     script:
         - docker build -t minha-imagem .
