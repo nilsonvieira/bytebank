@@ -37,6 +37,7 @@ build-project:
         SECRET_KEY: 'r*5ltfzw-61ksdm41fuul8+hxs$86yo9%k1%k=(!@=-wv4qtyv'
 
     stage: build
+    image: nilsonrsvieira/minha-imagem:latest
     tags:
     - executor-tarefas
     dependencies:
