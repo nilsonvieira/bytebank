@@ -64,6 +64,7 @@ test-project:
         DB_HOST: 'mysql'
         SECRET_KEY: 'r*5ltfzw-61ksdm41fuul8+hxs$86yo9%k1%k=(!@=-wv4qtyv'
     stage: test
+    image: nilsonrsvieira/minha-imagem:latest
     dependencies:
     - build-project
     tags:
