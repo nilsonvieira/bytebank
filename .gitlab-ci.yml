@@ -47,6 +47,8 @@ build-project:
     - python manage.py migrate
 
 test-project:
+    image: nilsonrsvieira/minha-imagem:latest
+    stage: test
     services:
     - docker:dind
     - mysql:5.7
@@ -62,8 +64,6 @@ test-project:
         DB_PORT: '3386'
         DB_HOST: 'mysql'
         SECRET_KEY: 'r*5ltfzw-61ksdm41fuul8+hxs$86yo9%k1%k=(!@=-wv4qtyv'
-    stage: test
-    image: nilsonrsvieira/minha-imagem:latest
     dependencies:
     - build-project
     tags:
