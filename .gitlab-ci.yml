@@ -79,9 +79,10 @@ deploy-project:
     # dependencies:
     #   - test-project
     script:
-    - tar cfz arquivos.tgz *
-    - scp arquivos.tgz nilson@192.168.100.4:/home/nilson/Workspace/pessoal/treinamentos/alura/bytebank/
-    - ssh nilson@192.168.100.4 'cd /home/nilson/Workspace/pessoal/treinamentos/alura/bytebank/ ; tar -xfz arquivos.tgz; docker-compose up -d'
+    # - tar cfz arquivos.tgz *
+    # - scp arquivos.tgz nilson@192.168.100.4:/home/nilson/Workspace/pessoal/treinamentos/alura/bytebank/
+    # - ssh nilson@192.168.100.4 'cd /home/nilson/Workspace/pessoal/treinamentos/alura/bytebank/ ; tar -xfz arquivos.tgz; docker-compose up -d'
+    - echo "teste"
 
 notificacao-sucesso:
     stage: notificacao
@@ -89,7 +90,7 @@ notificacao-sucesso:
     - executor-deploy
     when: on_success
     script:
-    - echo "Tudo certo!"
+    - sh notificacaoSucesso.sh
 
 notificacao-falha:
     stage: notificacao
@@ -97,4 +98,4 @@ notificacao-falha:
     - executor-deploy
     when: on_failure
     script:
-    - echo "Tudo errado!"
+    - sh notificacaoFalha.sh
