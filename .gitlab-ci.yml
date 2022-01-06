@@ -71,3 +71,12 @@ test-project:
     script:
     - python -m unittest setUp
 
+deploy-project:
+    stage: deploy
+    tags:
+    - executor-deploy
+    script:
+    - tar cfz arquivos.tgz *
+    - scp arquivos.tgz nilson@192.168.100.4:/home/nilson/Workspace/pessoal/treinamentos/alura/bytebank/
+    - ssh nilson@192.168.100.4 'cd /home/nilson/Workspace/pessoal/treinamentos/alura/bytebank/ ; tar -xfz arquivos.tgz; docker-compose up -d'
+
