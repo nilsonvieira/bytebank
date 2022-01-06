@@ -5,71 +5,72 @@ stages:
 - build
 - test
 - deploy
+- notificacao
 
-build-docker:
-    services:
-    - docker:dind
+# build-docker:
+#     services:
+#     - docker:dind
 
-    before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+#     before_script:
+#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
 
-    stage: pre-build
-    script:
-        - docker build -t minha-imagem .
-        - docker tag minha-imagem nilsonrsvieira/minha-imagem:latest
-        - docker push nilsonrsvieira/minha-imagem:latest
+#     stage: pre-build
+#     script:
+#         - docker build -t minha-imagem .
+#         - docker tag minha-imagem nilsonrsvieira/minha-imagem:latest
+#         - docker push nilsonrsvieira/minha-imagem:latest
 
-build-project:
-    services:
-    - docker:dind
-    - mysql:5.7
-    variables:
-        MYSQL_USER: devops-dev
-        MYSQL_PASSWORD: mestre
-        MYSQL_DATABASE: todo-dev
-        MYSQL_ROOT_PASSWORD: senha
+# build-project:
+#     services:
+#     - docker:dind
+#     - mysql:5.7
+#     variables:
+#         MYSQL_USER: devops-dev
+#         MYSQL_PASSWORD: mestre
+#         MYSQL_DATABASE: todo-dev
+#         MYSQL_ROOT_PASSWORD: senha
 
-        DB_NAME: 'todo-dev'
-        DB_USER: 'devops-dev'
-        DB_PASSWORD: 'mestre'
-        DB_PORT: '3386'
-        DB_HOST: 'mysql'
-        SECRET_KEY: 'r*5ltfzw-61ksdm41fuul8+hxs$86yo9%k1%k=(!@=-wv4qtyv'
+#         DB_NAME: 'todo-dev'
+#         DB_USER: 'devops-dev'
+#         DB_PASSWORD: 'mestre'
+#         DB_PORT: '3386'
+#         DB_HOST: 'mysql'
+#         SECRET_KEY: 'r*5ltfzw-61ksdm41fuul8+hxs$86yo9%k1%k=(!@=-wv4qtyv'
 
-    stage: build
-    image: nilsonrsvieira/minha-imagem:latest
-    tags:
-    - executor-tarefas
-    dependencies:
-      - build-docker
-    script:
-    - python manage.py makemigrations
-    - python manage.py migrate
+#     stage: build
+#     image: nilsonrsvieira/minha-imagem:latest
+#     tags:
+#     - executor-tarefas
+#     dependencies:
+#       - build-docker
+#     script:
+#     - python manage.py makemigrations
+#     - python manage.py migrate
 
-test-project:
-    image: nilsonrsvieira/minha-imagem:latest
-    stage: test
-    services:
-    - docker:dind
-    - mysql:5.7
-    variables:
-        MYSQL_USER: devops-dev
-        MYSQL_PASSWORD: mestre
-        MYSQL_DATABASE: todo-dev
-        MYSQL_ROOT_PASSWORD: senha
+# test-project:
+#     image: nilsonrsvieira/minha-imagem:latest
+#     stage: test
+#     services:
+#     - docker:dind
+#     - mysql:5.7
+#     variables:
+#         MYSQL_USER: devops-dev
+#         MYSQL_PASSWORD: mestre
+#         MYSQL_DATABASE: todo-dev
+#         MYSQL_ROOT_PASSWORD: senha
 
-        DB_NAME: 'todo-dev'
-        DB_USER: 'devops-dev'
-        DB_PASSWORD: 'mestre'
-        DB_PORT: '3386'
-        DB_HOST: 'mysql'
-        SECRET_KEY: 'r*5ltfzw-61ksdm41fuul8+hxs$86yo9%k1%k=(!@=-wv4qtyv'
-    dependencies:
-    - build-project
-    tags:
-    - executor-tarefas
-    script:
-    - python -m unittest setUp
+#         DB_NAME: 'todo-dev'
+#         DB_USER: 'devops-dev'
+#         DB_PASSWORD: 'mestre'
+#         DB_PORT: '3386'
+#         DB_HOST: 'mysql'
+#         SECRET_KEY: 'r*5ltfzw-61ksdm41fuul8+hxs$86yo9%k1%k=(!@=-wv4qtyv'
+#     dependencies:
+#     - build-project
+#     tags:
+#     - executor-tarefas
+#     script:
+#     - python -m unittest setUp
 
 deploy-project:
     stage: deploy
@@ -82,3 +83,18 @@ deploy-project:
     - scp arquivos.tgz nilson@192.168.100.4:/home/nilson/Workspace/pessoal/treinamentos/alura/bytebank/
     - ssh nilson@192.168.100.4 'cd /home/nilson/Workspace/pessoal/treinamentos/alura/bytebank/ ; tar -xfz arquivos.tgz; docker-compose up -d'
 
+notificacao-sucesso:
+    stage: notificacao
+    tags:
+    - executor-deploy
+    when: on_success
+    script:
+    - echo "Tudo certo!"
+
+notificacao-falha:
+    stage: notificacao
+    tags:
+    - executor-deploy
+    when: on_failure
+    script:
+    - echo "Tudo errado!"
