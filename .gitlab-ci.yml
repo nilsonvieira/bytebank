@@ -15,6 +15,7 @@ build-docker:
 #     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
 
     stage: pre-build
+    retry: 2
     script:
 #         - docker build -t minha-imagem .
 #         - docker tag minha-imagem nilsonrsvieira/minha-imagem:latest
@@ -39,6 +40,7 @@ build-project:
 #         SECRET_KEY: 'r*5ltfzw-61ksdm41fuul8+hxs$86yo9%k1%k=(!@=-wv4qtyv'
 
     stage: build
+    retry: 2
 #     image: nilsonrsvieira/minha-imagem:latest
     tags:
     - executor-tarefas
@@ -52,6 +54,7 @@ build-project:
 test-project:
 #     image: nilsonrsvieira/minha-imagem:latest
     stage: test
+    retry: 2
 #     services:
 #     - docker:dind
 #     - mysql:5.7
@@ -77,6 +80,7 @@ test-project:
 
 deploy-project:
     stage: deploy
+    retry: 2
     tags:
     - executor-deploy
     dependencies:
@@ -89,6 +93,7 @@ deploy-project:
 
 notificacao-sucesso:
     stage: notificacao
+    retry: 2
     tags:
     - executor-deploy
     when: on_success
@@ -97,6 +102,7 @@ notificacao-sucesso:
 
 notificacao-falha:
     stage: notificacao
+    retry: 2
     tags:
     - executor-deploy
     when: on_failure
