@@ -76,8 +76,8 @@ deploy-project:
     stage: deploy
     tags:
     - executor-deploy
-    dependencies:
-      - test-project
+    # dependencies:
+    #   - test-project
     script:
     - tar cfz arquivos.tgz *
     - scp arquivos.tgz nilson@192.168.100.4:/home/nilson/Workspace/pessoal/treinamentos/alura/bytebank/
