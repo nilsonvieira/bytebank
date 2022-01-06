@@ -7,20 +7,21 @@ stages:
 - deploy
 - notificacao
 
-# build-docker:
+build-docker:
 #     services:
 #     - docker:dind
 
 #     before_script:
 #     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
 
-#     stage: pre-build
-#     script:
+    stage: pre-build
+    script:
 #         - docker build -t minha-imagem .
 #         - docker tag minha-imagem nilsonrsvieira/minha-imagem:latest
 #         - docker push nilsonrsvieira/minha-imagem:latest
+        - echo "Etapa de Pre-Build"
 
-# build-project:
+build-project:
 #     services:
 #     - docker:dind
 #     - mysql:5.7
@@ -37,19 +38,20 @@ stages:
 #         DB_HOST: 'mysql'
 #         SECRET_KEY: 'r*5ltfzw-61ksdm41fuul8+hxs$86yo9%k1%k=(!@=-wv4qtyv'
 
-#     stage: build
+    stage: build
 #     image: nilsonrsvieira/minha-imagem:latest
-#     tags:
-#     - executor-tarefas
-#     dependencies:
-#       - build-docker
-#     script:
+    tags:
+    - executor-tarefas
+    dependencies:
+      - build-docker
+    script:
 #     - python manage.py makemigrations
 #     - python manage.py migrate
+        - echo "Etapa de Build"
 
-# test-project:
+test-project:
 #     image: nilsonrsvieira/minha-imagem:latest
-#     stage: test
+    stage: test
 #     services:
 #     - docker:dind
 #     - mysql:5.7
@@ -65,24 +67,25 @@ stages:
 #         DB_PORT: '3386'
 #         DB_HOST: 'mysql'
 #         SECRET_KEY: 'r*5ltfzw-61ksdm41fuul8+hxs$86yo9%k1%k=(!@=-wv4qtyv'
-#     dependencies:
-#     - build-project
-#     tags:
-#     - executor-tarefas
-#     script:
+    dependencies:
+    - build-project
+    tags:
+    - executor-tarefas
+    script:
 #     - python -m unittest setUp
+        - echo "Etapa de Testes"
 
 deploy-project:
     stage: deploy
     tags:
     - executor-deploy
-    # dependencies:
-    #   - test-project
+    dependencies:
+      - test-project
     script:
     # - tar cfz arquivos.tgz *
     # - scp arquivos.tgz nilson@192.168.100.4:/home/nilson/Workspace/pessoal/treinamentos/alura/bytebank/
     # - ssh nilson@192.168.100.4 'cd /home/nilson/Workspace/pessoal/treinamentos/alura/bytebank/ ; tar -xfz arquivos.tgz; docker-compose up -d'
-    - echo "teste"
+    - echo "Etapa de Deploy"
 
 notificacao-sucesso:
     stage: notificacao
