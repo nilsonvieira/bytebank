@@ -82,7 +82,7 @@ deploy-project:
     stage: deploy
     retry: 2
     tags:
-    - executor-deploy
+    - executor-tarefas
     dependencies:
       - test-project
     script:
@@ -95,7 +95,7 @@ notificacao-sucesso:
     stage: notificacao
     retry: 2
     tags:
-    - executor-deploy
+    - executor-tarefas
     when: on_success
     script:
     - sh notificacaoSucesso.sh
@@ -104,7 +104,7 @@ notificacao-falha:
     stage: notificacao
     retry: 2
     tags:
-    - executor-deploy
+    - executor-tarefas
     when: on_failure
     script:
     - sh notificacaoFalha.sh
